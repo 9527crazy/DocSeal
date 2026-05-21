@@ -15,8 +15,8 @@
 
 | 层级 | 技术 |
 |------|------|
-| 前端 | Vue 3 + TypeScript + Vite |
-| 后端 | Node.js + NestJS |
+| 前端 | Vue 3 + TypeScript + Vite + Element Plus |
+| 后端 | Node.js + NestJS + TypeORM |
 | 数据库 | SQLite (better-sqlite3) |
 | PDF 处理 | pdf-lib + pdfjs-dist |
 | Word 处理 | docxtemplater + LibreOffice |
@@ -97,30 +97,26 @@ docseal/
 ├── apps/
 │   ├── web/                    # 前端 Vue 3 应用
 │   │   ├── src/
-│   │   │   ├── components/     # 通用组件
-│   │   │   ├── views/          # 页面组件
+│   │   │   ├── api/            # API 请求封装
+│   │   │   ├── layouts/        # 布局组件
+│   │   │   ├── router/         # 路由配置
 │   │   │   ├── stores/         # Pinia 状态管理
-│   │   │   ├── api/            # API 请求
-│   │   │   └── utils/          # 工具函数
+│   │   │   └── views/          # 页面组件
+│   │   │       ├── contract/   # 合同相关页面
+│   │   │       └── template/   # 模版相关页面
 │   │   └── package.json
 │   │
 │   └── server/                 # 后端 NestJS 应用
 │       ├── src/
-│       │   ├── modules/        # 业务模块
-│       │   │   ├── template/   # 模版管理
-│       │   │   ├── contract/   # 合同生成
-│       │   │   ├── stamp/      # 印章管理
-│       │   │   └── batch/      # 批量生成
 │       │   ├── common/         # 公共模块
-│       │   │   ├── guards/     # 认证守卫
 │       │   │   ├── filters/    # 异常过滤器
 │       │   │   └── interceptors/ # 拦截器
-│       │   └── main.ts
+│       │   ├── config/         # 配置模块
+│       │   ├── database/       # 数据库配置
+│       │   │   └── migrations/ # 数据库迁移
+│       │   └── modules/        # 业务模块
+│       │       └── health/     # 健康检查
 │       └── package.json
-│
-├── packages/
-│   └── shared/                 # 前后端共享代码
-│       └── types/              # TypeScript 类型定义
 │
 ├── data/                       # 数据目录
 │   ├── templates/              # 模版文件
@@ -204,6 +200,9 @@ docseal/
 ### 数据库迁移
 
 ```bash
+# 进入服务器目录
+cd apps/server
+
 # 运行迁移
 pnpm migration:run
 

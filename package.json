@@ -2,13 +2,14 @@
   "name": "docseal",
   "private": true,
   "scripts": {
-    "dev": "pnpm --filter server start:dev & pnpm --filter web dev",
-    "build": "pnpm --filter server build && pnpm --filter web build",
+    "check:node": "node scripts/check-node-version.cjs",
+    "dev": "pnpm check:node && (pnpm --filter server start:dev & pnpm --filter web dev)",
+    "build": "pnpm check:node && pnpm --filter server build && pnpm --filter web build",
     "lint": "pnpm --filter server lint && pnpm --filter web lint",
     "format": "pnpm --filter server format && pnpm --filter web format"
   },
   "engines": {
-    "node": ">=18",
+    "node": "20.x",
     "pnpm": ">=8"
   },
   "pnpm": {

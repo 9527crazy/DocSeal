@@ -14,10 +14,14 @@ dist/
 # Database
 data/*.db
 data/*.db-journal
+apps/server/data/*.db
+apps/server/data/*.db-journal
 
 # Uploads
 uploads/*
 !uploads/.gitkeep
+apps/server/uploads/*
+!apps/server/uploads/.gitkeep
 
 # IDE
 .vscode/

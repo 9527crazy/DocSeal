@@ -12,6 +12,7 @@ import { mkdir, rm, writeFile } from 'node:fs/promises';
 import { extname, join, parse, resolve } from 'node:path';
 import { Repository } from 'typeorm';
 import { CreateTemplateDto } from './dto/create-template.dto';
+import * as mammoth from 'mammoth';
 import {
   TemplateDetailResponseDto,
   TemplateListItemResponseDto,
@@ -56,8 +57,9 @@ export class TemplateService {
     }
 
     const fileType = this.validateFile(file);
+    const originalName = Buffer.from(file.originalname, "latin1").toString("utf8");
     const uploadDir = this.getUploadDir();
-    const relativePath = this.buildRelativePath(file.originalname);
+    const relativePath = this.buildRelativePath(originalName);
     const absolutePath = resolve(uploadDir, relativePath);
 
     await mkdir(resolve(absolutePath, '..'), { recursive: true });
@@ -68,13 +70,20 @@ export class TemplateService {
       const variables = this.buildVariables(variableNames);
       const warnings = variableNames.length === 0 ? ['未识别到变量占位符'] : [];
 
+      let htmlContent: string | undefined;
+      if (fileType === 'docx') {
+        const result = await mammoth.convertToHtml({ buffer: file.buffer });
+        htmlContent = result.value || undefined;
+      }
+
       const template = await this.templateRepository.manager.transaction(async (manager) => {
         const templateEntity = manager.create(Template, {
-          name: this.resolveTemplateName(dto.name, file.originalname),
-          originalName: file.originalname,
+          name: this.resolveTemplateName(dto.name, originalName),
+          originalName: originalName,
           filePath: relativePath,
           fileType,
           category: this.normalizeOptionalText(dto.category),
+          htmlContent,
           variables: JSON.stringify(
             variables.map((variable) => ({
               name: variable.name,
@@ -138,6 +147,7 @@ export class TemplateService {
       ...this.toListItem(template),
       variables: this.toVariableResponse(template.variableEntities ?? []),
       warnings,
+      htmlContent: template.htmlContent ?? undefined,
     };
   }
 

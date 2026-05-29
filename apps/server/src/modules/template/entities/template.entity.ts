@@ -31,6 +31,9 @@ export class Template {
   @Column({ nullable: true })
   category: string;
 
+  @Column({ name: 'html_content', type: 'text', nullable: true })
+  htmlContent: string;
+
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
 

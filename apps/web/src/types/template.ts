@@ -24,6 +24,7 @@ export interface TemplateItem {
 export interface TemplateDetail extends TemplateItem {
   variables: TemplateVariable[]
   warnings: string[]
+  htmlContent?: string
 }
 
 export interface UploadTemplatePayload {

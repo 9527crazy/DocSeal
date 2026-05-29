@@ -23,6 +23,7 @@ export interface TemplateListItemResponseDto {
 export interface TemplateDetailResponseDto extends TemplateListItemResponseDto {
   variables: TemplateVariableResponseDto[];
   warnings: string[];
+  htmlContent?: string;
 }
 
 export interface TemplateUploadResponseDto extends TemplateDetailResponseDto {}

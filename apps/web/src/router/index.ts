@@ -23,11 +23,6 @@ const router = createRouter({
           name: 'contract-generate',
           component: () => import('@/views/contract/generate.vue'),
         },
-        {
-          path: 'contract/preview/:id',
-          name: 'contract-preview',
-          component: () => import('@/views/contract/preview.vue'),
-        },
       ],
     },
     {
